@@ -1,0 +1,61 @@
+Topic:
+Event Loop + Call Stack
+#Call Stack=current executing code area
+Node executes:one thing at a time
+---------------------------------------------------
+#Event Loop=
+it is a system that checks:"Is main execution free now?"
+If yes:bring waiting callback back
+That’s literally its job.
+-------------------------------------------------------
+Full Example Properly
+console.log("A");
+setTimeout(() => {
+   console.log("B");
+}, 0);
+console.log("C");
+-----------------
+Step-by-Step Internally
+>Step 1:
+console.log("A");
+Output:A
+>Step 2:
+setTimeout(...)
+Node says:
+"This is async.
+Handle it separately."
+So callback waits outside main execution.
+>Step 3:
+console.log("C");
+Output:C
+Current Output
+A
+C
+>Step 4
+Main code finished.
+>>>>>Event loop checks:"Any waiting callbacks?"
+Finds:console.log("B")
+Runs it.
+Output:
+B
+>>>>Final Output
+A
+C
+B
+----------------------------------------------------------
+6. MOST IMPORTANT UNDERSTANDING
+setTimeout(...,0) does NOT mean:
+run instantly
+It means:minimum wait time = 0ms
+BUT callback STILL waits until:main execution finishes
+--------------------------------------------------------------
+7. Why This Matters In Backend
+Backend constantly waits for:
+databases
+APIs
+uploads
+authentication
+
+Node’s async system allows:
+handling many users efficiently without freezing
+THAT is why Node.js became popular.

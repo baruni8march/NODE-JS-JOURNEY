@@ -1,0 +1,33 @@
+Till day 2 we learnt backend building blocks but theyre running only inside my terminal
+but we need a server now.
+A server is a program that:
+waits for requests
+processes logic
+sends response
+example:
+Website/React app asks:
+"Login this user"
+
+*SERVER* does:
+~check username/password
+~check database
+~create token
+~send success/fail response
+---------------------------------------------------------------
+*REQUEST*:A request is when a client asks for something.
+Client can be:
+browser
+React app
+mobile app
+Postman
+--------------------------------------------------------------
+*RESPONSE*:A response is what server sends back.
+Example:{ name: "Riddhi", age: 20 }
+------------------------------------------------------------
+*EXPRESS*
+Express is a package that helps us create servers easily in Node.js.
+Without Express: hard server code.
+With Express: clean server code.
+>>steps:
+1.npm install express
+2.use:const express = require("express");

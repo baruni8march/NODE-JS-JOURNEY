@@ -1,0 +1,112 @@
+fs means:File System
+It allows Node.js to interact with files on your computer.
+Examples:
+create files,read files,update files,delete files
+
+>Browser JavaScript cannot directly do this.
+>Node.js can.
+----------------------------------------------------------
+2. Import fs:
+const fs = require("fs");
+[IMPORTANT:fs is built into Node.js.So:NO npm install needed]
+Unlike lodash or express.
+--------------------------------------------------------------
+3. Create File
+index.js:
+const fs = require("fs");
+fs.writeFileSync("bio.txt", "I am learning Node.js");
+console.log("File created");
+
+Understanding This Properly:writeFileSync
+Break it:write + file + sync
+Meaning:
+write into file synchronously
+What Does "Sync" Mean?synchronous
+Meaning:wait until operation finishes
+before moving to next line
+
+So Node:creates/writes file
+waits
+THEN runs:console.log()
+What Happens After Running?
+Node creates:bio.txt
+Inside:I am learning Node.js
+----------------------------------------------------------
+4. Read File
+const fs = require("fs");
+const data = fs.readFileSync("bio.txt", "utf8");
+console.log(data);
+
+Understanding:readFileSync
+Meaning:read file synchronously
+Why "utf8"?
+Files are internally stored as binary.
+utf8 converts file content into readable text.
+
+Without utf8:<Buffer 48 65 6c 6c 6f>
+weird output appears.
+-----------------------------------------------------------
+5. VERY IMPORTANT
+Node.js Can Interact With OS.This is why Node.js is backend technology.
+It can:
+create reports
+store logs
+upload images
+manage files
+read configs
+
+>>Real backend apps constantly use filesystem.
+--------------------------------------------------------------
+6. Sync vs Async Files
+Synchronous:
+fs.readFileSync()
+>Node WAITS.
+
+Asynchronous:
+fs.readFile()
+>>Node does NOT wait.
+
+Example:
+const fs = require("fs");
+fs.readFile("bio.txt", "utf8", (err, data) => {
+    console.log(data);
+});
+console.log("Finished");
+Possible output:
+Finished
+I am learning Node.js
+
+WHY?Because:
+readFile is async
+Node continues executing other code.
+Exactly like:setTimeout
+----------------------------------------------------------
+7. Understanding Callback Here
+This part:
+(err, data) => {
+   console.log(data);
+}
+is callback function.
+
+Meaning:
+"When file reading finishes,
+run this code."
+VERY IMPORTANT
+Most Node.js backend work is:
+asynchronous
+Because:
+databases are slow
+APIs are slow
+uploads are slow
+
+Async prevents server blocking.
+--------------------------------------------------
+synchronous a calback function use hobena cz sync directly returns data
+and in asynchronous we use callback bcz as there is a chance of freezing so instead of freezing it ensures that untill the data is loaded fully from file or written on file let us complete the other tasks.and abt the (err,data)=>{} part its used to handle error cz what is the file doesnt exist.and if u want to handle error on synch:
+const fs = require("fs");
+try {
+   const data = fs.readFileSync("missing.txt", "utf8");
+   console.log(data);
+} catch (err) {
+   console.log("File not found");
+}

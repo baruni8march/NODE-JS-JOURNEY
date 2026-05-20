@@ -1,0 +1,18 @@
+Real Backend Situation:
+Suppose user logs in.
+Backend flow:
+Receive login request
+↓
+Check database
+↓
+Generate token
+↓
+Send response
+
+Problem:database check is slow
+Maybe:
+2 sec
+5 sec
+network delay
+Node CANNOT freeze entire server meanwhile.
+So backend uses:async workflow

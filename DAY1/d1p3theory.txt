@@ -1,0 +1,79 @@
+1. What is npm?
+npm stands for:Node Package Manager
+Purpose:
+>install libraries
+>manage dependencies
+>run scripts
+
+Think of npm as:app Store for Node.js
+---------------------------------------------------------------
+2. What is a Package?
+A package is reusable code made by other developers.
+Examples:
+>authentication libraries
+>database libraries
+>backend frameworks
+>utility functions
+
+Instead of building everything manually:
+we install packages.
+----------------------------------------------------------------
+3. Initialize a Node Project
+[what is node project?:
+A folder containing:
+- JavaScript files
+- package.json
+- installed packages
+- project configuration
+
+]
+Run:
+npm init -y
+This says:This folder is now officially
+a Node.js project."
+And it creates:package.json
+----------------------------------------------------------------
+4. What is package.json?
+This is the MOST IMPORTANT file in Node projects.
+It stores:project information
+>project name
+>dependencies(which package and its version is installed info like these)
+>scripts
+>version
+
+Example:
+{
+  "name": "day1",
+  "version": "1.0.0"
+}
+[real life example:Imagine you build backend app.
+and You used:express,mongoose,bcrypt
+Now another developer downloads your project.
+How will they know what packages are needed?
+ANSWER:
+package.json
+They simply run:npm install
+And npm installs ALL dependencies automatically.
+
+THIS is why package.json is important.]
+Real backend apps depend heavily on this file.
+---------------------------------------------------------
+Final Correct Mental Model
+Packages like:
+lodash,express,mongoose
+are huge collections of pre-written code.
+Instead of writing thousands of lines yourself:
+>npm install express:downloads all that code into:
+node_modules/
+Then you simply use it with:
+require("express")
+That’s exactly the concept.
+--------------------------------------------
+Lodash is basically:a huge utility library
+It gives ready-made functions for:
+arrays,strings,objects,data manipulation
+----------------------------------------
+steps:
+1.npm init -y:create package.json
+2.npm install packagename: npm install lodash
+creates node_modules ,package-lock.json and changes the dependencies of package.json to :lodash:version

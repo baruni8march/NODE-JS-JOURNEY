@@ -1,0 +1,80 @@
+The Real Problem
+Suppose:read file takes:3 seconds
+If Node waits:entire server freezes
+Bad.So Node uses:
+asynchronous programming
+--------------------------------------------
+difference between normal and callback function is:
+in normal:
+function greet(){
+    ....
+}
+in callback u pass it in another function meaning node says when task finishes ill call this func later:
+example:
+1.setTimeout(greet,1000); here we passed greet to setTimeout
+2.setTimeout(() => {
+   console.log("Finished");
+}, 2000);
+means:After 2 seconds,
+run callback function
+-------------------------------------------------------
+but when u have too many tasks to do u jst dont use callbacks after callbacks cz its hard and ugly like:
+doSomething(() => {
+   doAnotherThing(() => {
+      doMore(() => {
+      });
+   });
+});
+to solve this we use promise
+--------------------------------------------------------------
+A Promise means:
+"I promise I'll give result later."
+Promise has 3 states:pending,fulfilled,rejected
+5.Promise Example
+const promise = new Promise((resolve, reject) => {
+   let success = true;
+   if (success) {
+      resolve("Operation successful");
+   } else {
+      reject("Operation failed");
+   }
+});
+
+promise
+   .then((data) => {
+      console.log(data);
+   })
+   .catch((err) => {
+      console.log(err);
+   });
+===================================================
+Code Explanation:
+> new Promise() creates a Promise object
+> by convention we usually pass:(resolve, reject)
+> resolve means:success happened
+> reject means:failure/error happened
+> promises are asynchronous,so instead of try-catch,
+older Promise syntax uses:.then() and .catch()
+> if resolve("Success") runs,so .then((data)) executes,
+where:data="Success"
+> if reject("Failure") runs,then .catch((err)) executes,
+where:err = "Failure"
+----------------------------------------------------------------
+7. Async/Await (MODERN BACKEND STYLE)
+This is what real backend apps mostly use.
+Async/await makes async code LOOK synchronous.
+
+async function fetchData() {
+   const result = await getData();
+   console.log(result);
+}
+fetchData();
+
+code:
+>await getData():"Wait for promise to finish"
+>await only works inside:async function
+
+REAL BACKEND EXAMPLE:
+const user = await User.findById(id);
+const token = await bcrypt.hash(password);
+Modern backend is FULL of async/await.
