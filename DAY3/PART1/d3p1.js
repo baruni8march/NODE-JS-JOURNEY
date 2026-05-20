@@ -3,6 +3,7 @@ const express=require("express");
 const app=express();
 //create server app
 app.get("/",(req,res)=>{ //create route
+    //route means url path
     //means:when client send GET request  run this func
     res.send("Hello from server"); //send response to client
 });
@@ -21,3 +22,5 @@ app.listen(3000,()=>{ //start server on port 3000
 // Express server
 // ↓ response
 // "Hello from server"
+
+

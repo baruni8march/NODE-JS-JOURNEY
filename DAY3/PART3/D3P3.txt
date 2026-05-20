@@ -1,0 +1,115 @@
+Goal:Learn how frontend sends data to backend.
+>before we learnt:
+Client sends request
+↓
+Server sends fixed response
+
+>Now we will learn:
+Client sends request WITH data
+↓
+Server reads that data
+↓
+Server makes decision
+↓
+Server sends response based on that data
+-----------------------------------------------------------
+#GET VS POST:
+GET:Used to fetch/read data
+>EXAMPLE:
+    app.get("/profile", (req, res) => {
+    res.json({ name: "admin" });
+     });
+
+POST:POST:Used when client sends data to backend for processing / creating / saving / checking.
+>EXAMPLE:
+    app.post("/login", (req, res) => {
+    res.json({ message: "Login route hit" });
+    });
+------------------------------------------------------
+but while posting when client sends data like(json data):
+{
+  "username": "admin",
+  "password": "1234"
+}
+But Express does not automatically understand JSON body unless we tell it.So without this:app.use(express.json());
+this will be:req.body
+Result:undefined
+
+>What express.json() does:Express, whenever JSON data comes from client,please read it and convert it into a JavaScript object.
+----------------------------------------------------------
+SOME CONFUSIONS:
+How POST Works:
+Suppose Thunder Client sends:{
+    "username": "RIDDHI",
+    "password": "1234"
+}
+to:POST http://localhost:3005/login
+Then Express receives it here:
+app.post("/login", (req, res) => {
+The sent data becomes:req.body
+So:
+req.body.username is:RIDDHI
+and:req.body.password is:1234
+Then your backend checks:
+if (username === "RIDDHI" && password === "1234")
+If true, server sends:
+{
+    "success": true,
+    "message": "Login successful"
+}
+If false, server sends:
+{
+    "success": false,
+    "message": "Invalid credentials"
+}
+-----------------------------------------------------------
+What is req.body?body means:
+the data sent inside the request
+For POST requests, client usually sends data in the body.
+Example request body:
+{
+    "username": "RIDDHI",
+    "password": "1234"
+}
+Then in Express:req.body becomes:
+{
+    username: "RIDDHI",
+    password: "1234"
+}
+So:
+req.body.username
+gets username.
+req.body.password
+gets password.
+Why app.use(express.json())?
+This does not post info.
+It means:
+Express, if JSON data comes in request body,please read it and convert it into a JS object.
+Without:app.use(express.json());
+this:req.bodywill be:
+undefined
+because Express won’t understand the JSON data.
+Why not use GET for login?
+Because GET is for reading/fetching data.
+Login sends sensitive data:
+{
+    "username": "RIDDHI",
+    "password": "1234"
+}
+So we use POST.
+Simple rule:
+GET  = give me data
+POST = here is my data, process it
+Login is:
+here is username/password, check it
+So login uses POST.
+---------------------------------------------
+thunderclient is an api testing tool.others are:
+Common alternatives:
+
+Tool	                 Best for
+Postman	            Most popular API testing tool
+Insomnia	        Cleaner/simple Postman alternative
+Hoppscotch	        Browser-based API testing
+curl	            Terminal-based testing
+VS Code REST Client	Test APIs from .http files inside VS Code

@@ -1,0 +1,21 @@
+how to test in thunderclient?:
+1. Open Thunder Client
+In VS Code, click Thunder Client icon.
+2. Click New Request
+3. Change method
+    Select:POST(Not GET.)
+4. Add URL->http://localhost:3005/login
+(should be http cz http is for localhost.not https)
+This means:Send data to the /login route of my backend server.
+5. Add JSON body
+Go to:
+Body → JSON
+Write:
+{
+  "username": "RIDDHI",
+  "password": "1234"
+}
+
+This is the data client is sending to backend.
+
+6.Click Send:Your backend receives this data and shows response

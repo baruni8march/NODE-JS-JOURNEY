@@ -1,0 +1,50 @@
+*PROCESS TO UPLOAD TO GITHUB*
+
+1. Open terminal in main project folder:
+
+git init
+
+2. Add all files:
+
+git add .
+
+3. Create first commit:
+
+git commit -m "small note about what you've done"
+
+4. Create .gitignore file
+to prevent unnecessary uploads.
+
+Example:
+
+node_modules
+.refact
+
+5. If wrong files were uploaded/tracked:
+
+git rm -r --cached foldername
+
+Example:
+
+git rm -r --cached .refact
+
+Then commit again:
+
+git add .
+git commit -m "removed unnecessary files"
+
+6. Create repository on GitHub.
+
+Then connect local project to GitHub:
+
+git remote add origin https://github.com/USERNAME/REPO.git
+
+git branch -M main
+
+git push -u origin main
+
+7. From next time onwards after updates:
+
+git add .
+git commit -m "your message"
+git push

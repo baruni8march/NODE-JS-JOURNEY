@@ -31,3 +31,34 @@ With Express: clean server code.
 >>steps:
 1.npm install express
 2.use:const express = require("express");
+------------------------------------------
+app.get("/",...):
+/ means homepage and url:localhost:3000/
+/about:about     "   "  :localhost:3000/about
+/contact:contact
+
+--------------------------------------------------
+What is GET?
+GET is a type of request.
+Used for:getting/fetching data
+--------------------------------------------------
+What are req and res?
+(req, res)
+These are objects automatically given by Express.
+
+req means:request object
+Contains:URL
+data sent by client
+headers
+parameters
+Basically:
+everything client sent
+
+res means:response object
+Used to:send response back to client
+----------------------------------------------------------
+What is app.listen()?
+app.listen(3000) means:
+Start server
+and listen for requests
+on port 3000

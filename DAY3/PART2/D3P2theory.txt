@@ -1,0 +1,34 @@
+GOAL:Understand how frontend talks to backend routes
+>A route is:HTTP method + URL path + handler function
+Example:
+app.get("/about", (req, res) => {
+    res.send("About page");
+});
+This means:If client sends GET request to /about,run this function and send response.
+
+>>>>>>Route structure<<<<<<<<<<<<<<<<<<<<
+app.get("/path", (req, res) => {
+    res.send("response");
+});
+
+*********Breakdown*************
+app       = your Express server
+get       = request method
+"/path"   = route path
+req       = incoming request info
+res       = outgoing response tool
+
+----------------------------------------------------------------
+##res.send() vs res.json()
+
+>res.send():Good for text/html/simple output:
+res.send("Hello");
+
+>res.json():Good for API data:
+res.json({
+    name: "Riddhi",
+    role: "Backend learner"
+});
+In real APIs, we mostly use:res.json()
+----------------------------------------------------
+Backend sends data to frontend using JSON because it is easy for JavaScript/React to understand.
