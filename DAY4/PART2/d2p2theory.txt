@@ -1,0 +1,41 @@
+#DELETE ITEM USING id
+>demo:
+  app.delete("/todos/:id", (req, res) => {
+
+});
+
+>>logic:
+    get id from URL
+    find todo index
+    if not found → 404
+    if found → delete from array
+    send success response
+
+>>Imp array method to know:
+     const index = todos.findIndex((item) => {
+    return item.id === id;
+});
+
+
+
+-----------------------------
+PROPER DEMO:
+app.delete("/todos/:id",(req,res)=>{
+    const id=Number(req.params.id);
+    const index = todos.findIndex((item) => {
+    return item.id === id;
+});
+     if(index===-1){
+        return res.status(404).json({
+             "success": false, 
+             "message": "Todo not found"
+        });
+     }
+     else{
+        todos.splice(index,1);  //splice is used to delete 
+        res.status(200).json({
+            "success": true,
+            "message": "Todo deleted successfully"
+        });
+     }
+});

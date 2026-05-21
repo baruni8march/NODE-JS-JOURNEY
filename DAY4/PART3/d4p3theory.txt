@@ -1,0 +1,20 @@
+GET     = read/fetch data
+POST    = create/add new data
+PUT     = update existing data
+DELETE  = remove data
+
+for out todo API:
+GET /todos
+→ show all todos from memory array
+
+GET /todos/1
+→ show one todo with id 1
+
+POST /todos
+→ add/create a new todo
+
+PUT /todos/1
+→ update todo with id 1
+
+DELETE /todos/1
+→ delete todo with id 1

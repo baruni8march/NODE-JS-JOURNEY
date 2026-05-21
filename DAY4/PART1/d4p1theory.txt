@@ -1,0 +1,35 @@
+#ROUTE PARAM
+What is a route param?
+A route param is a value inside the URL.
+Example:
+GET /todos/2
+Here:
+2 = todo id
+like in express:app.get("/todos/:id", (req, res) => {
+    const id = req.params.id;
+});
+
+>>>req.params.id gets the value from URL.
+
+an imp example from d3p4:
+code:
+/*app.get("/todos/:id", (req, res) => {
+    const id = Number(req.params.id);
+
+    const todo = todos.find((item) => {
+        return item.id === id;
+    });
+
+    if (!todo) {
+        return res.status(404).json({
+            success: false,
+            message: "Todo not found"
+        });
+    }
+
+    res.status(200).json({
+        success: true,
+        todo: todo
+    });
+});*/
+we have used req.body.name stuffs bt now we learnt req.params.id and we can directly check it by urlpath/id which is jst urlpath gives u all json datas bt url/id gives u specific data u want
