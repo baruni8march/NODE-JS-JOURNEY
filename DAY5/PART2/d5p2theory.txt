@@ -1,0 +1,23 @@
+inside the part 1 folder :
+1.we created server.js,todoroutes(inside routes folder),todocontroller.js(inside controller folder)
+2.in server.js:
+special thing we used is:
+app.use("api",todoRoutes)
+which connexts this with todoroutes
+
+3.and in todoroutes.js:
+special thing we used is:
+const router=express.Router()
+
+we used router.get("/todos",gettodos)
+
+and obvsly must thing to module.exports=router
+
+4.lastly in controller.js:
+we created the function and exported it
+
+--------------------------------
+while testing:
+GET  http://localhost:5000/api/todos
+GET  http://localhost:5000/api/todos/1
+POST http://localhost:5000/api/todos

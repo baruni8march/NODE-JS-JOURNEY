@@ -1,0 +1,140 @@
+real backend apps are not written like that.
+Why structure matters?:
+One file becomes messy when you add:
+auth
+users
+todos
+products
+orders
+database
+middleware
+validation
+
+So we split code by responsibility.
+----------------------------------------------------------------
+Professional Express apps often look like this:
+
+project/
+│
+├── server.js
+├── routes/
+│   └── todoRoutes.js
+├── controllers/
+│   └── todoController.js
+└── package.json
+
+-------------------------------------------------------------
+What each file does?
+>>server.js:Main entry file.
+Job:
+start app
+connect middleware
+connect routes
+listen on port
+
+>>routes/todoRoutes.js
+Job:
+define API paths
+Example:
+GET /todos
+POST /todos
+PUT /todos/:id
+DELETE /todos/:id
+[Routes should not contain heavy logic.]
+
+>>controllers/todoController.js
+Job:
+actual request handling logic
+Example:
+get all todos
+create todo
+update todo
+delete todo
+------------------------------------------------------
+Simple mental model
+server.js
+↓
+routes decide WHERE request goes
+↓
+controllers decide WHAT happens
+
+
+Example:
+Client sends GET /todos
+↓
+server.js receives request
+↓
+todoRoutes.js matches /todos
+↓
+todoController.js sends todos
+-----------------------------------------------------
+#OWN EXPLANATION:
+>>In React, instead of putting everything in:
+App.jsx
+you create:
+components/
+pages/
+hooks/
+
+>>In backend, instead of putting everything in:
+server.js
+we create:
+routes/
+controllers/
+middlewares/
+models/
+
+>>>React App.jsx = main frontend entry/layout connector
+Express server.js = main backend entry/connector
+
+>>>>>Route vs Controller
+
+**Before:You wrote everything together:
+app.get("/todos", (req, res) => {
+    res.json({
+        success: true,
+        todos: todos
+    });
+});
+
+***bt now Here:We split it.
+
+#route file:router.get("/todos", getAllTodos);
+Meaning:When GET /todos comes, call getAllTodos.
+
+#controller file:function getAllTodos(req, res) {
+    res.json({
+        success: true,
+        todos: todos
+    });
+}
+
+Meaning:Actually handle the request and response.
+
+
+-----------------------------------------------------
+#MIDDLEWARES
+Middleware is code that runs between request and final route response.
+
+Flow:
+request
+↓
+middleware
+↓
+route
+↓
+controller
+↓
+response
+
+>We have already used middleware:
+app.use(express.json());
+
+That middleware reads JSON body and makes req.body available.
+
+Other middleware examples:
+
+check if user is logged in
+validate data
+log requests
+handle errors
