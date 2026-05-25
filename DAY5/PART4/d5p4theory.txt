@@ -1,0 +1,56 @@
+Right now your controller does almost everything:
+reads req.params
+finds todo
+creates todo
+updates array
+deletes todo
+sends response
+
+That works, but in bigger apps it becomes messy.
+
+>So we add:
+services/
+└── todoService.js
+
+>>>Controller should handle request/response.
+>>>Service should handle data/business logic.
+
+--------------------------------------------------------------
+
+1. New structure
+Your project becomes:
+DAY5/PART1/
+│
+├── server.js
+├── routes/
+│   └── todoRoutes.js
+├── controllers/
+│   └── todoController.js
+└── services/
+    └── todoService.js
+
+What service does
+Service contains logic like:
+get all todos
+find todo by id
+create todo
+update todo
+delete todo
+
+Controller just calls service and sends response.
+
+Mental model
+route
+↓
+controller
+↓
+service
+↓
+data
+
+---------------------------------------------------------
+Controller handles HTTP side:
+take data from req
+call service
+decide status code
+send res.json()
