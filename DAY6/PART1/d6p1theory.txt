@@ -87,7 +87,7 @@ DELETE /todos/:id   → delete todo
 
 Now SQL has commands for the same things:
 1.SELECT * FROM todos;
-:Show me all rows from todos table.
+:Show me all rows from todos table.lkOLP:[]
 
 2.SELECT * FROM todos WHERE id = 1;
 :Show me the todo whose id is 1.

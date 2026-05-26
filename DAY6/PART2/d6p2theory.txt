@@ -1,0 +1,27 @@
+We’ll use SQLite first because:
+no heavy setup
+no separate server needed
+database is just one file
+perfect for learning SQL with Node.js
+
+SQLite stores data in a local .db file. Node can connect to that file and run SQL queries. We’ll use the sqlite3 npm package for this setup.
+-----------------------------------------------------------
+inside terminal:
+npm init -y
+npm install express sqlite3
+
+-------------------------------------------------------------
+create:
+DAY6/PART2/
+│
+├── server.js
+└── database.js
+
+------------------------------------------------------------
+
+here database.js:
+This file will:
+
+connect to SQLite database
+create database file
+create todos table
