@@ -1,0 +1,17 @@
+###Important SQLite methods:
+
+>>>db.run():Used for commands that change database:
+CREATE
+INSERT
+UPDATE
+DELETE
+Example:
+db.run("INSERT INTO todos (title) VALUES (?)");
+
+>>>db.all():Used to read multiple rows.
+Example:
+db.all("SELECT * FROM todos", (err, rows) => {});
+
+>>db.get():Used to read one row.
+Example:
+db.get("SELECT * FROM todos WHERE id = ?", [id], (err, row) => {});
