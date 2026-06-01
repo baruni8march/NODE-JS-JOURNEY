@@ -1,0 +1,232 @@
+#EXPLANATION OF TODOSERVICE.JS:
+
+>>First: what is a callback here?
+:A callback is a function we pass to another function so it can call us back later.
+**Simple idea:"Do this database work.
+When you finish, call this function."
+
+SQLite database work takes time, so we cannot instantly get result.
+
+So instead of:const todos = db.all("SELECT * FROM todos");
+we write:
+db.all("SELECT * FROM todos", (err, rows) => {
+    // result comes here later
+});
+
+Here:(err, rows) => { ... }
+is callback.
+
+2. Your service file
+const db=require("../database");
+This imports the database connection from database.js.
+
+So now this file can use:
+db.all()
+db.run()
+
+3. getalltodosservice(callback)
+function getalltodosservice(callback){
+    db.all("SELECT * FROM todos", callback);
+}
+This means:
+Run SQL:SELECT * FROM todos
+When database finishes,call the callback function.
+
+db.all() gives callback two things:(err, rows)
+Meaning:
+err  = if database failed
+rows = all todos from database
+
+So when controller calls:getalltodosservice((err, rows) => {
+    if(err){
+       // send database error
+    }
+
+    // send rows as response
+});
+
+********That (err, rows) => {} function becomes the callback.
+So this:db.all("SELECT * FROM todos", callback);
+actually becomes like:
+db.all("SELECT * FROM todos", (err, rows) => {
+    if(err){
+       // error response
+    }
+    // success response with rows
+});
+
+4. Why service doesn’t send response?
+Because service should not know about:
+req
+res
+status
+json
+
+Service only says:
+I got data / I got error.
+Controller decides how to respond.
+
+5. createtodoservice(title, callback)
+function createtodoservice(title,callback){
+This function needs two things:
+title    = what todo to insert
+callback = what to do after insert finishes
+
+6. db.run(...)
+db.run(
+    "INSERT INTO todos (title,completed) VALUES(?,?)",
+    [title,0],
+    function(err){
+        ...
+    }
+);
+
+db.run() is used for:
+INSERT
+UPDATE
+DELETE
+CREATE TABLE
+Here it inserts a new todo.
+7. What are ? ?
+"INSERT INTO todos (title,completed) VALUES(?,?)",
+[title,0]
+The ? are placeholders.
+If:
+title = "Learn SQLite"
+Then SQLite understands it like:
+INSERT INTO todos (title, completed)
+VALUES ('Learn SQLite', 0)
+So:
+first ?  = title
+second ? = 0
+We use ? because it is safer than directly putting variables inside SQL string.
+
+8. This callback inside db.run
+function(err){
+    if(err){
+        return callback(err);
+    }
+
+    callback(null,{
+        id:this.lastID,
+        title:title,
+        completed:0
+    });
+}
+
+This runs after insert finishes.
+If insert fails
+if(err){
+    return callback(err);
+}
+Means:
+Something went wrong.
+Send error back to controller.
+If insert succeeds
+callback(null,{
+    id:this.lastID,
+    title:title,
+    completed:0
+});
+Means:
+No error.
+Here is the newly created todo.
+Why null?
+Because callback style usually follows:
+callback(error, result)
+So:
+callback(null, newTodo)
+means:
+error = null
+result = newTodo
+9. What is this.lastID?
+When SQLite inserts a row, it auto-generates the ID.
+Because in table:
+id INTEGER PRIMARY KEY AUTOINCREMENT
+So SQLite creates:
+id = 1, 2, 3, 4...
+After insert, this:
+this.lastID
+means:
+the id of the row that was just inserted
+Example response:
+{
+    id: 3,
+    title: "Learn SQLite",
+    completed: 0
+}
+
+10. Full flow for POST
+When Thunder Client sends:
+{
+  "title": "Learn SQLite"
+}
+Flow:
+POST /api/todos
+↓
+route calls createtodo controller
+↓
+controller reads req.body.title
+↓
+controller calls createtodoservice(title, callback)
+↓
+service runs INSERT SQL
+↓
+database saves todo
+↓
+service calls callback(null, newTodo)
+↓
+controller receives newTodo
+↓
+controller sends JSON response
+11. Service file in plain English
+const db=require("../database");
+
+Use database connection.
+
+function getalltodosservice(callback){
+    db.all("SELECT * FROM todos",callback);
+}
+
+Get all todos from database, then give result to controller.
+
+function createtodoservice(title,callback){
+
+Create a todo with given title.
+
+db.run(
+    "INSERT INTO todos (title,completed) VALUES(?,?)",
+    [title,0],
+
+Insert title and completed value into database.
+
+function(err){
+
+After insert finishes, run this function.
+
+if(err){
+    return callback(err);
+}
+
+If database failed, send error to controller.
+
+callback(null,{
+    id:this.lastID,
+    title:title,
+    completed:0
+});
+
+If success, send created todo to controller.
+
+Final short memory
+callback = function called after database finishes
+
+service = talks to database
+
+controller = receives service result and sends response
+
+In this code:
+
+db.all → reads rows → callback(err, rows)
+
+db.run → inserts row → callback(err, newTodo)
