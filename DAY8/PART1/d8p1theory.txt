@@ -1,0 +1,120 @@
+# PostgreSQL
+
+> SQLite is file-based. It is good for learning, but not best for bigger apps with many users.
+> PostgreSQL is server-based. It can handle bigger projects, many users, and many requests.
+> pg module lets Node.js connect with PostgreSQL.
+> Pool manages database connections. It keeps ready connections so every query does not need a new connection.
+> const { Pool } = require("pg");
+> pool.query() runs SQL queries in PostgreSQL.
+> pool.query() returns a Promise.
+> Promise means: "The result will come later." Database work takes time, so Node waits using await.
+> Because pool.query() returns a Promise, we use async/await instead of callbacks.
+> PostgreSQL does not automatically create a database. We create the database once in pgAdmin.
+> Tables can be created manually in pgAdmin or programmatically using CREATE TABLE IF NOT EXISTS.
+
+------------------------------------------------------------
+
+STEPS:
+
+1. Open VS Code terminal inside the project folder.
+
+2. Create package.json:
+npm init -y
+
+3. Install required packages:
+npm install express pg
+
+express = for creating server and routes
+pg = for connecting Node.js with PostgreSQL
+
+4. Open pgAdmin:
+Servers -> PostgreSQL -> Databases -> Create -> Database
+
+Database name:
+todosdb
+
+Note:
+Database name in pgAdmin and database name in database.js must be exactly same.
+
+5. In database.js, import Pool:
+
+const { Pool } = require("pg");
+
+6. Create PostgreSQL connection pool:
+
+const pool = new Pool({
+    user: "postgres",
+    host: "localhost",
+    database: "todosdb",
+    password: "your_postgresql_password",
+    port: 5432
+});
+
+user = PostgreSQL username
+host = where PostgreSQL server is running
+database = database name
+password = PostgreSQL password
+port = PostgreSQL default port
+
+7. Create todos table from Node.js:
+
+async function createTable(){
+    const query = `
+        CREATE TABLE IF NOT EXISTS todos(
+            id SERIAL PRIMARY KEY,
+            title TEXT NOT NULL,
+            completed BOOLEAN DEFAULT false
+        )
+    `;
+
+    await pool.query(query);
+}
+
+createTable()
+    .then(() => console.log("Todos table ready"))
+    .catch(err => console.error("Table creation failed", err));
+
+8. Export pool:
+
+module.exports = pool;
+
+------------------------------------------------------------
+
+OLD VS NEW:
+
+SQLite:
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database("./todos.db");
+
+PostgreSQL:
+const { Pool } = require("pg");
+const pool = new Pool({...});
+
+SQLite read:
+db.all("SELECT * FROM todos", callback);
+
+PostgreSQL read:
+const result = await pool.query("SELECT * FROM todos");
+return result.rows;
+
+SQLite insert:
+db.run("INSERT INTO todos(title,completed) VALUES(?,?)", [title,0], callback);
+
+PostgreSQL insert:
+const result = await pool.query(
+    "INSERT INTO todos(title,completed) VALUES($1,$2) RETURNING *",
+    [title,false]
+);
+return result.rows[0];
+
+------------------------------------------------------------
+
+# ABOUT DATABASE
+
+> pgAdmin is only a management tool. Closing pgAdmin does not stop PostgreSQL server.
+> PostgreSQL server keeps running in the background.
+> Node.js connects to PostgreSQL server, not to pgAdmin.
+> Database is created once. We do not create it every time.
+> Tables are also created once. CREATE TABLE IF NOT EXISTS prevents duplicate table creation.
+> If database does not exist, Node.js cannot connect and table creation will fail.
+> If table does not exist, our createTable() function creates it automatically.
