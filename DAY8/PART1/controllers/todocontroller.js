@@ -7,12 +7,31 @@ const {
 } = require("../services/todoservice");
 
 // GET all todos
-async function getalltodos(req, res) {
-    try {
-        const todos = await getalltodoservice();
-        res.status(200).json({ success: true, todos });
-    } catch (err) {
-        res.status(500).json({ success: false, message: "Database error" });
+async function getalltodos(req,res){
+    let completed=req.query.completed;
+    const search=req.query.search;
+    let limit=req.query.limit;
+
+    if(completed!==undefined){
+        completed=completed==="true";
+    }
+
+    if(limit!==undefined){
+        limit=Number(limit);
+    }
+
+    try{
+        const todos=await getalltodoservice(completed,search,limit);
+        res.status(200).json({
+            success:true,
+            todos:todos
+        });
+    }
+    catch(err){
+        res.status(500).json({
+            success:false,
+            message:"Database error"
+        });
     }
 }
 

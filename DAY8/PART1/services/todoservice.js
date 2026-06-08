@@ -1,7 +1,32 @@
 const pool=require("../database");
 
-async function getalltodoservice(){
-    const result=await pool.query("SELECT * FROM todos");
+async function getalltodoservice(completed,search,limit){
+    let query="SELECT * FROM todos";
+    const values=[];
+    const conditions=[];
+
+    if(completed!==undefined){
+        values.push(completed);
+        conditions.push(`completed=$${values.length}`);
+    }
+
+    if(search!==undefined){
+        values.push(`%${search}%`);
+        conditions.push(`title ILIKE $${values.length}`);
+    }
+
+    if(conditions.length>0){
+        query=query+" WHERE "+conditions.join(" AND ");
+    }
+
+    query=query+" ORDER BY id ASC";
+
+    if(limit!==undefined){
+        values.push(limit);
+        query=query+` LIMIT $${values.length}`;
+    }
+
+    const result=await pool.query(query,values);
     return result.rows;
 }
 
