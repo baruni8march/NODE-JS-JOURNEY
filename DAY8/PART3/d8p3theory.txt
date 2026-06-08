@@ -1,0 +1,16 @@
+
+ALL ABOUT PROMISE
+----------------------------------------------------
+Database work takes time. So PostgreSQL does not instantly return data.
+pool.query() returns a Promise.
+Promise means: “I will give result later.”
+async allows a function to use await.
+await waits until the Promise finishes, then gives the actual result.
+Without await, you get a pending Promise, not real database data.
+This is why PostgreSQL code becomes cleaner than SQLite callbacks.
+---------------------------------------------------------------------
+Promise = result comes later
+async = function can use await
+await = wait for result
+pool.query() = returns Promise
+result.rows = actual database data

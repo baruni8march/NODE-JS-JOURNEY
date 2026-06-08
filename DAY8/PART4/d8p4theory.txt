@@ -1,0 +1,104 @@
+# QUERY PARAMS
+Till now your GET API does only this:GET /api/todos ->>[It returns all todos.]
+
+But real apps need more control:
+
+GET /api/todos?completed=true  [get the todos which are completed]
+GET /api/todos?search=rec  [get todos who's title contain "rec"]
+GET /api/todos?limit=2 [only frst two rows]
+GET /api/todos?completed=false&search=da&limit=1  [1st todo which isnt completed]
+
+So d8p4 is about making your GET API smarter.
+
+----------------------------------------------------------------------------
+#old get service:
+async function getalltodoservice(){
+    const result=await pool.query("SELECT * FROM todos");
+    return result.rows;
+}
+
+meaning:Give me all todos.
+No filter.
+No search.
+No limit.
+
+-----------------------------------------------------------------------------
+#new get service:
+Give me todos based on optional filters.
+So service will receive:
+completed
+search
+limit
+from controller.
+
+
+async function getalltodoservice(completed,search,title){
+    let query="SELECT * FROM todos";
+    const values=[];
+    const conditions=[];
+    if(completed!==undefined){
+        values.push(completed);
+        condition.push(`completed=$${values.length}`);
+    }
+    if(search!==undefined){
+        values.push(`%${search}%`);
+        conditions.push(`title ILIKE $${values.length}`);
+    }
+    if(conditions.length>0){
+        query=query+" WHERE "+conditions.join(" AND ");
+    }
+    query=query+"ORDER BY id ASC";
+    if(id!==undefined){
+        values.push(limit);
+        query=query+`LIMIT $${values.length}`;
+    }
+    const result=await pool.query(query,values);
+    return result.rows;
+}
+----------------------------------------------------------
+todocontroller:
+async function getalltodos(req,res){
+    let completed=req.query.completed;
+    const search=req.query.search;
+    let limit=req.query.limit;
+
+    if(completed!==undefined){
+        completed=completed==="true";
+    }
+
+    if(limit!==undefined){
+        limit=Number(limit);
+    }
+
+    try{
+        const todos=await getalltodoservice(completed,search,limit);
+        res.status(200).json({
+            success:true,
+            todos:todos
+        });
+    }
+    catch(err){
+        res.status(500).json({
+            success:false,
+            message:"Database error"
+        });
+    }
+}
+
+--------------------------------------------------
+SQL:
+SELECT * FROM todos WHERE completed = true;
+
+SQL:
+SELECT * FROM todos WHERE title ILIKE '%rec%';
+
+if:GET /api/todos?search=rec
+SQL:
+SELECT * FROM todos ORDER BY id ASC LIMIT 2;
+
+if :GET /api/todos?completed=false&search=da&limit=1
+SQL:
+SELECT * FROM todos
+WHERE completed = false AND title ILIKE '%da%'
+ORDER BY id ASC
+LIMIT 1;
