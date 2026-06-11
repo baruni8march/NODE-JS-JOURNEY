@@ -1,0 +1,87 @@
+Previously, we directly wrote database password inside code like this:password: "123456"
+This is not safe because anyone can see your password if the code is shared.
+So now we use a .env file.
+>>>.env means environment file:It stores secret or changeable values like:
+database password
+database name
+server port
+JWT secret
+API key
+OpenAI key
+
+[In real projects and hackathons, this is very important because later we will use API keys for:
+OpenAI
+OCR API
+Speech-to-text API
+Translation API
+TTS API
+So from today, we start using .env
+]
+-----------------------------------------------
+1.after npm init -y :npm install express pg dotenv
+2.npm install -D nodemon
+nodemon auto-restarts your server when you change code.
+
+>Without nodemon:
+node server.js:You must stop and restart server again and again.
+
+>With nodemon:
+nodemon server.js
+Server restarts automatically after file save.
+-------------------------------------------------
+create database:[PREVIOUSLY WE USED TO CREATE THIS INSIDE DATABASE.JS BT THIS IS BETTER PRACTICE]
+1.Open pgAdmin
+2: Create database
+Left side:Servers
+↓
+PostgreSQL
+↓
+Databases
+right-click on Databases.
+Click:Create
+↓
+Database
+
+Database name:rural_health_db
+Owner:postgres
+Then click Save.
+
+3: Open Query Tool
+Now click your database:rural_health_db
+Then click:Query Tool
+
+Run this SQL:
+CREATE TABLE patients (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    age INT NOT NULL,
+    gender VARCHAR(20),
+    symptoms TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+4: Check tableRun:SELECT * FROM patients;
+If you see empty table, it is correct.
+--------------------------------------------------------
+Why edit package.json now?
+Before, you may have run server like this:node server.js
+That works.
+But problem is: every time you change code, you must stop and restart server manually.
+
+So now we use nodemon.
+It auto-restarts server when code changes.
+That is why we edit package.json.
+
+Update only the scripts part:
+"scripts": {
+  "start": "node server.js",
+  "dev": "nodemon server.js"
+}
+--------------------------------------------------
+Now run server using:npm run dev
+If you do not want to edit package.json, you can run:
+npx nodemon server.js
+-----------------------------------------------
+create .gitignore:
+node_modules
+.env
