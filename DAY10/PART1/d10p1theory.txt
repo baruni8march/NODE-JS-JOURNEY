@@ -1,0 +1,13 @@
+Register API + Password Hashing
+
+Today we add user registration to your existing project.
+Main new thing:
+bcrypt = converts password into unreadable hash
+Example:
+123456
+↓
+$2b$10$sdjksd...longHash
+
+So password will not be saved directly in database.
+-------------------------------------------------------
+npm install bcrypt
