@@ -1,0 +1,31 @@
+In Express, async database code can fail.
+Example: wrong SQL, wrong ID, database connection problem.
+Previously we handled error inside every controller using try/catch.
+But this repeats too much code.
+So today we will create one common ****asyncHandler.****
+It will catch async errors automatically.
+Then one ***errorMiddleware*** will send error response.
+-------------------------------------------------------------------------
+You will only add 2 new folders/files:
+
+PART1/
+│
+├── server.js
+├── database.js
+├── .env
+├── package.json
+│
+├── routes/
+│   └── patientroute.js
+│
+├── controllers/
+│   └── patientcont.js
+│
+├── services/
+│   └── patientservice.js
+│
+├── utils/
+│   └── asyncHandler.js
+│
+└── middlewares/
+    └── errorMiddleware.js
