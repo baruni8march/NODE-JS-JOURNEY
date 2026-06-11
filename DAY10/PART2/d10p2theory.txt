@@ -1,0 +1,76 @@
+User will login with email + password.
+If correct, server will return a JWT token.
+--------------------------------
+>Install JWT package
+Run inside your backend folder:
+npm install jsonwebtoken
+--------------------------------------
+Update .env:
+Add this line in .env:JWT_SECRET=my_super_secret_key_123
+
+------------------------------------------------------
+
+real-life example:
+real websites do give you a token, but they usually hide it from you.You do not see it because the browser stores it automatically.
+Real-life example: Facebook / Gmail
+When you login:
+You enter email + password
+↓
+Server checks them
+↓
+Server creates login proof
+↓
+Browser stores that proof secretly
+
+After that, when you open another page like:
+Gmail inbox
+Facebook profile
+YouTube studio
+You do not login again because browser sends that hidden proof automatically.
+
+>>>>>Where is the token stored?
+
+Usually in one of these places:
+1. Cookies
+2. Local Storage
+3. Session Storage
+
+Most normal users never see them.
+But developers can see them in browser DevTools.
+
+That proof can be:
+JWT token
+or
+session cookie
+
+-----------------------------------------------
+#JWT vs Cookie
+1. JWT token system
+
+Server gives token.->Frontend stores it.->Then frontend sends it like:
+Authorization: Bearer token_here
+This is common in:
+mobile apps
+React apps
+API-based systems
+hackathon projects
+
+2. Cookie session system
+
+Server gives a cookie.->Browser automatically sends cookie with every request.
+This is common in:
+traditional websites
+Gmail
+Facebook
+bank websites
+admin panels
+You do not manually send anything.
+Browser does it.
+
+-------------------------------------------------------
+Important logic
+bcrypt.compare(password, user.password)
+Checks normal password with hashed password.
+jwt.sign(...):Creates login token.
+expiresIn: "1d"
+Token expires after 1 day.

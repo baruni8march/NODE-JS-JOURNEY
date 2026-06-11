@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const authService = require("../services/authservice");
 const asyncHandler = require("../utils/asynchandler");
@@ -37,6 +38,51 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 });
 
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw createError("Email and password are required", 400);
+  }
+
+  const user = await authService.findUserByEmailService(email);
+
+  if (!user) {
+    throw createError("Invalid email or password", 401);
+  }
+
+  const isPasswordMatched = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordMatched) {
+    throw createError("Invalid email or password", 401);
+  }
+
+  const token = jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1d",
+    }
+  );
+
+  res.status(200).json({
+    success: true,
+    message: "Login successful",
+    token: token,
+    data: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
+  });
+});
+
 module.exports = {
   registerUser,
+  loginUser,
 };
